@@ -1,0 +1,15 @@
+---
+- name: Install react app
+  include_tasks: install.yml
+  tags:
+    - install
+
+- name: Configure react app
+  include_tasks: configure.yml
+  tags:
+    - configure
+
+- name: Cleanup
+  include_tasks: cleanup.yml
+  tags:
+    - cleanup

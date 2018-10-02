@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Ona Engineering
+  company: Ona Systems Inc
+  description: Install and configure React
+  min_ansible_version: 2.6
+  platforms:
+  - name: Ubuntu
+    versions:
+      - all
+  categories:
+  - system
+
+

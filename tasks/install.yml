@@ -1,0 +1,91 @@
+---
+- name: Add system user
+  user:
+    name: "{{ system_user }}"
+    shell: /bin/bash
+    group: "{{ system_group }}"
+    append: yes
+    createhome: yes
+
+- name: Add yarn apt key
+  shell: curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  become: True
+  become_user: root
+  args:
+    warn: no
+
+- name: Add yarn to sources
+  shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  become: True
+  become_user: root
+
+- name: Download node
+  shell: curl -sL https://deb.nodesource.com/setup_{{ node_version }} | sudo -E bash -
+  become: True
+  become_user: root
+  args:
+    warn: no
+
+- name: Update apt cache
+  apt:
+    update_cache: "yes"
+
+- name: Install system-wide dependencies
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: 600
+  with_items: "{{ system_wide_dependencies }}"
+
+- name: Ensure required directories are present
+  file:
+    state: directory
+    owner: "{{ system_user }}"
+    group: www-data
+    path: "{{ item }}"
+  when:
+    - item is defined
+    - item is not none
+  with_items:
+    - "{{ versioned_path }}"
+    - "{{ checkout_path }}"
+    - "{{ system_user_home }}/.ssh"
+
+- name: Git clone without key
+  git:
+    accept_hostkey: "yes"
+    repo: "{{ git_url }}"
+    dest: "{{ checkout_path }}"
+    version: "{{ git_version }}"
+    depth: 1
+  become: True
+  become_user: "{{ system_user }}"
+  when:
+    - git_key is not defined
+    - git_key is none
+
+- name: Copy git key
+  copy:
+    content: "{{ git_key }}"
+    dest: "{{ system_user_home }}/.ssh/{{ git_key_filename }}"
+    owner: "{{ system_user }}"
+    mode: 0600
+  no_log: False
+  when:
+    - git_key is defined
+    - git_key is not none
+
+- name: Git clone with key
+  git:
+    accept_hostkey: "yes"
+    repo: "{{ git_url }}"
+    dest: "{{ checkout_path }}"
+    version: "{{ git_version }}"
+    depth: 1
+    key_file: "{{ system_user_home }}/.ssh/{{ git_key_filename }}"
+  become: True
+  become_user: "{{ system_user }}"
+  when:
+    - git_key is defined
+    - git_key is not none
