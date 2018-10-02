@@ -99,4 +99,4 @@
   when:
     - git_key is defined
     - git_key is not none
-    - remove_git_key is True
+    - remove_git_key == True

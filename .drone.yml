@@ -8,11 +8,6 @@ pipeline:
       - apt-get -y clean && apt-get -y autoclean
       - ansible-playbook -i "127.0.0.1," tests/test.yml --syntax-check
       - ansible-playbook -i "127.0.0.1," tests/test.yml --connection=local --become
-      - >
-        ansible-playbook -i "127.0.0.1," tests/test.yml --connection=local --become
-        | grep -q 'changed=13.*failed=0'
-        && (echo 'Idempotence test: pass' && exit 0)
-        || (echo 'Idempotence test: fail' && exit 1)
     secrets: [ git_key ]
   notify:
     image: plugins/slack
