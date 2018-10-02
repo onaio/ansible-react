@@ -23,7 +23,6 @@
     node_version: 10.x
     git_url: "git@github.com:onaio/kaznet-frontend.git"
     git_version: "master"
-    git_key:
     app_settings:
       REACT_APP_WEBSITE_NAME: 'Example App'
       SOMETHING_ELSE: "you can put anything here"
