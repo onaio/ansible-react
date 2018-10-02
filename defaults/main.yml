@@ -7,7 +7,6 @@ system_user_home: "/home/{{ system_user }}"
 git_url:
 git_version: "master"
 git_key:
-git_public_key:
 git_key_filename: "id_ed25519"
 
 # system-wide dependencies
