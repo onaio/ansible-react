@@ -89,3 +89,14 @@
   when:
     - git_key is defined
     - git_key is not none
+
+- name: Remove Git Key
+  file:
+    state: absent
+    path: "{{ system_user_home }}/.ssh/{{ git_key_filename }}"
+  become: True
+  become_user: "{{ system_user }}"
+  when:
+    - git_key is defined
+    - git_key is not none
+    - remove_git_key is True

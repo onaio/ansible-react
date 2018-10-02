@@ -8,6 +8,7 @@ git_url:
 git_version: "master"
 git_key:
 git_key_filename: "id_ed25519"
+remove_git_key: True
 
 # system-wide dependencies
 system_wide_dependencies:
