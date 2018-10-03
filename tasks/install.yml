@@ -62,8 +62,7 @@
   become: True
   become_user: "{{ system_user }}"
   when:
-    - git_key is not defined
-    - git_key is none
+    - git_key is not defined or git_key is none
 
 - name: Copy git key
   copy:
