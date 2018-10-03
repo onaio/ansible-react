@@ -20,7 +20,7 @@ Some of the more important variables are briefly described below.  You can see a
 system_user: "react"  # name of the user that will own the django installation
 node_version: 10.x  # the version of node to install
 
-git_url: "https://github.com/moshthepitt/django-template3.git"  # the git repo of your django app which we are installing
+git_url: "https://github.com/onaio/kaznet-frontend.git"  # the git repo of your django app which we are installing
 git_key:
 ```
 
