@@ -24,17 +24,9 @@
     git_url: "git@github.com:onaio/kaznet-frontend.git"
     git_version: "master"
     git_key: |
-      -----BEGIN OPENSSH PRIVATE KEY-----
-      b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-      QyNTUxOQAAACA9qCTlybKhynrJk3BeoT0A7xBlqzaqg/kZdj3sK9jPKQAAAKCeaoI/nmqC
-      PwAAAAtzc2gtZWQyNTUxOQAAACA9qCTlybKhynrJk3BeoT0A7xBlqzaqg/kZdj3sK9jPKQ
-      AAAEDYh6iqUK/8egdsvLNmnW4nAcr1kcCLcoOQA3xnYPZFJD2oJOXJsqHKesmTcF6hPQDv
-      EGWrNqqD+Rl2Pewr2M8pAAAAF21vc2hAbW9zaC1UaGlua1BhZC1UNDcwAQIDBAUG
-      -----END OPENSSH PRIVATE KEY-----
+      {{ lookup('env', 'GIT_KEY') }}
     app_settings:
       REACT_APP_WEBSITE_NAME: 'Example App'
-      REACT_APP_KAZNET_ENDPOINT: 'http://127.0.0.1:8000/api/v1'
-      REACT_APP_API_TOKEN: 'a068bf9af441dcb308d2ee51295d548218757bc5'
       SOMETHING_ELSE: "you can put anything here"
   gather_facts: True
   become: True
