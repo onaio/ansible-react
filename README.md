@@ -1,5 +1,7 @@
 # ansible-react
 
+[![Build Status](http://cicd.onalabs.org/api/badges/onaio/ansible-react/status.svg)](http://cicd.onalabs.org/onaio/ansible-react)
+
 Install and configure react apps.
 
 This is a simple and straight-to-the-point role to install react apps.  it is tested against apps that were created using [create react app](https://github.com/facebook/create-react-app).

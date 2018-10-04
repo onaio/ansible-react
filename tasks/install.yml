@@ -32,11 +32,10 @@
 
 - name: Install system-wide dependencies
   apt:
-    pkg: "{{ item }}"
+    name: "{{ system_wide_dependencies }}"
     state: latest
     update_cache: yes
     cache_valid_time: 600
-  with_items: "{{ system_wide_dependencies }}"
 
 - name: Ensure required directories are present
   file:
