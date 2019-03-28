@@ -1,30 +1,30 @@
 # user
-system_user: "react"
-system_group: "www-data"
-system_user_home: "/home/{{ system_user }}"
+react_system_user: "react"
+react_system_group: "www-data"
+react_system_user_home: "/home/{{ react_system_user }}"
 
 # git
-git_url:
-git_version: "master"
-git_key:
-git_key_filename: "id_ed25519"
-remove_git_key: True
+react_git_url:
+react_git_version: "master"
+react_git_key:
+react_git_key_filename: "id_ed25519"
+react_remove_git_key: True
 
 # system-wide dependencies
-system_wide_dependencies:
+react_system_wide_dependencies:
   - git
   - nodejs
   - yarn
-node_version: 10.x
+react_node_version: 10.x
 
 # app
-env_name: "prod"
-app_name: "{{ system_user }}"
-codebase_path: "{{ system_user_home }}/app"
-versioned_path: "{{ codebase_path }}-versioned"
-checkout_path: "{{ versioned_path }}/{{ ansible_date_time['epoch'] }}"
-log_path: "/var/log/{{ app_name }}"
+react_env_name: "prod"
+react_app_name: "{{ react_system_user }}"
+react_codebase_path: "{{ react_system_user_home }}/app"
+react_versioned_path: "{{ react_codebase_path }}-versioned"
+react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
+react_log_path: "/var/log/{{ react_app_name }}"
 
 # app settings
-app_settings:
+react_app_settings:
   REACT_APP_WEBSITE_NAME: 'React Example App'
