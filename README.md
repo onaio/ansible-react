@@ -19,21 +19,21 @@ We intentionally consider the installation and configuration of web servers, and
 Some of the more important variables are briefly described below.  You can see all variables by looking at the `defaults/main.yml` file.
 
 ```yml
-system_user: "react"  # name of the user that will own the django installation
-node_version: 10.x  # the version of node to install
+react_system_user: "react"  # name of the user that will own the django installation
+react_node_version: 10.x  # the version of node to install
 
-git_url: "https://github.com/onaio/kaznet-frontend.git"  # the git repo of your django app which we are installing
-git_key:
+react_git_url: "https://github.com/onaio/kaznet-frontend.git"  # the git repo of your django app which we are installing
+react_git_key:
 ```
 
 ### Custom environment variables
 
 [Create react app](https://github.com/facebook/create-react-app) supports [custom environment variables](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) and this role does too!
 
-You can set custom environment variables by using the `app_settings` variable, like so:
+You can set custom environment variables by using the `react_app_settings` variable, like so:
 
 ```yml
-app_settings:
+react_app_settings:
     REACT_APP_WEBSITE_NAME: 'Example App'
     SOMETHING_ELSE: "you can put anything here"
 ```

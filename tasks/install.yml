@@ -1,9 +1,9 @@
 ---
 - name: Add system user
   user:
-    name: "{{ system_user }}"
+    name: "{{ react_system_user }}"
     shell: /bin/bash
-    group: "{{ system_group }}"
+    group: "{{ react_system_group }}"
     append: yes
     createhome: yes
 
@@ -20,7 +20,7 @@
   become_user: root
 
 - name: Download node
-  shell: curl -sL https://deb.nodesource.com/setup_{{ node_version }} | sudo -E bash -
+  shell: curl -sL https://deb.nodesource.com/setup_{{ react_node_version }} | sudo -E bash -
   become: True
   become_user: root
   args:
@@ -32,7 +32,7 @@
 
 - name: Install system-wide dependencies
   apt:
-    name: "{{ system_wide_dependencies }}"
+    name: "{{ react_system_wide_dependencies }}"
     state: latest
     update_cache: yes
     cache_valid_time: 600
@@ -40,61 +40,61 @@
 - name: Ensure required directories are present
   file:
     state: directory
-    owner: "{{ system_user }}"
+    owner: "{{ react_system_user }}"
     group: www-data
     path: "{{ item }}"
   when:
     - item is defined
     - item is not none
   with_items:
-    - "{{ versioned_path }}"
-    - "{{ checkout_path }}"
-    - "{{ system_user_home }}/.ssh"
+    - "{{ react_versioned_path }}"
+    - "{{ react_checkout_path }}"
+    - "{{ react_system_user_home }}/.ssh"
 
 - name: Git clone without key
   git:
     accept_hostkey: "yes"
-    repo: "{{ git_url }}"
-    dest: "{{ checkout_path }}"
-    version: "{{ git_version }}"
+    repo: "{{ react_git_url }}"
+    dest: "{{ react_checkout_path }}"
+    version: "{{ react_git_version }}"
     depth: 1
   become: True
-  become_user: "{{ system_user }}"
+  become_user: "{{ react_system_user }}"
   when:
-    - git_key is not defined or git_key is none
+    - react_git_key is not defined or react_git_key is none
 
 - name: Copy git key
   copy:
-    content: "{{ git_key }}"
-    dest: "{{ system_user_home }}/.ssh/{{ git_key_filename }}"
-    owner: "{{ system_user }}"
+    content: "{{ react_git_key }}"
+    dest: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
+    owner: "{{ react_system_user }}"
     mode: 0600
   no_log: False
   when:
-    - git_key is defined
-    - git_key is not none
+    - react_git_key is defined
+    - react_git_key is not none
 
 - name: Git clone with key
   git:
     accept_hostkey: "yes"
-    repo: "{{ git_url }}"
-    dest: "{{ checkout_path }}"
-    version: "{{ git_version }}"
+    repo: "{{ react_git_url }}"
+    dest: "{{ react_checkout_path }}"
+    version: "{{ react_git_version }}"
     depth: 1
-    key_file: "{{ system_user_home }}/.ssh/{{ git_key_filename }}"
+    key_file: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
   become: True
-  become_user: "{{ system_user }}"
+  become_user: "{{ react_system_user }}"
   when:
-    - git_key is defined
-    - git_key is not none
+    - react_git_key is defined
+    - react_git_key is not none
 
 - name: Remove Git Key
   file:
     state: absent
-    path: "{{ system_user_home }}/.ssh/{{ git_key_filename }}"
+    path: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
   become: True
-  become_user: "{{ system_user }}"
+  become_user: "{{ react_system_user }}"
   when:
-    - git_key is defined
-    - git_key is not none
-    - remove_git_key == True
+    - react_git_key is defined
+    - react_git_key is not none
+    - react_remove_git_key == True

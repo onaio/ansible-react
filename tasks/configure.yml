@@ -2,30 +2,30 @@
 - name: Copy environment variables file
   template:
     src: env.j2
-    dest: "{{ checkout_path }}/.env"
+    dest: "{{ react_checkout_path }}/.env"
     mode: 0644
-    owner: "{{ system_user }}"
-    group: "{{ system_group }}"
+    owner: "{{ react_system_user }}"
+    group: "{{ react_system_group }}"
 
 - name: Install Javascript requirements
   shell: yarn install
   args:
-    chdir: "{{ checkout_path }}"
+    chdir: "{{ react_checkout_path }}"
   become: True
-  become_user: "{{ system_user }}"
+  become_user: "{{ react_system_user }}"
 
 - name: Compile Javascript
   shell: yarn build
   args:
-    chdir: "{{ checkout_path }}"
+    chdir: "{{ react_checkout_path }}"
   become: True
-  become_user: "{{ system_user }}"
+  become_user: "{{ react_system_user }}"
 
 - name: Make the new codebase current
   file:
-    src: "{{ checkout_path }}"
-    dest: "{{ codebase_path }}"
+    src: "{{ react_checkout_path }}"
+    dest: "{{ react_codebase_path }}"
     state: link
     force: yes
-    owner: "{{ system_user }}"
-    group: "{{ system_group }}"
+    owner: "{{ react_system_user }}"
+    group: "{{ react_system_group }}"
