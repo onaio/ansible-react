@@ -1,19 +1,28 @@
+# Yarn
+yarn_download_url: "https://yarnpkg.com/{{ yarn_version }}"
+yarn_install_destination: ""
+
 # user
 react_system_user: "react"
 react_system_group: "www-data"
 react_system_user_home: "/home/{{ react_system_user }}"
+
+# NVM
+react_nvm_node_version: "{{ react_node_version }}"
+react_nvm_nvm_root:  "{{ react_system_user_home }}/.nvm"
+react_nvm_node_dir: "{{ react_nvm_nvm_root }}/versions/node/{{ react_nvm_node_version }}"
+react_nvm_npm_path: "{{ react_node_dir }}/bin/npm"
+react_nvm_version: "v0.34.0"
 
 # git
 react_git_url:
 react_git_version: "master"
 react_git_key:
 react_git_key_filename: "id_ed25519"
-react_remove_git_key: True
+react_remove_git_key: true
 
 # system-wide dependencies
 react_system_wide_dependencies:
-  - git
-  - nodejs
   - yarn
 react_node_version: 10.x
 

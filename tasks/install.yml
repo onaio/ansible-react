@@ -1,48 +1,35 @@
 ---
-- name: Add system user
-  user:
-    name: "{{ react_system_user }}"
-    shell: /bin/bash
-    group: "{{ react_system_group }}"
-    append: yes
-    createhome: yes
+- name: Install NVM
+  include_role:
+    name: onai.nvm
+  delegate_to: 127.0.0.1
+  become_user: "{{ react_system_user }}"
+  vars:
+    nvm_user: "{{ react_system_user }}"
+    nvm_group: "{{ react_system_group }}"
+    nvm_node_version: "{{ react_nvm_node_version }}"
+    nvm_install_path: "{{ react_nvm_nvm_root }}"
+    nvm_node_dir: "{{ react_nvm_node_dir }}"
+    nvm_npm_path: "{{ react_nvm_npm_path }}"
+    nvm_version: "{{ react_nvm_version }}"
 
-- name: Add yarn apt key
-  shell: curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  become: True
-  become_user: root
-  args:
-    warn: no
-
-- name: Add yarn to sources
-  shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  become: True
-  become_user: root
-
-- name: Download node
-  shell: curl -sL https://deb.nodesource.com/setup_{{ react_node_version }} | sudo -E bash -
-  become: True
-  become_user: root
-  args:
-    warn: no
-
-- name: Update apt cache
-  apt:
-    update_cache: "yes"
-
-- name: Install system-wide dependencies
-  apt:
-    name: "{{ react_system_wide_dependencies }}"
-    state: latest
-    update_cache: yes
-    cache_valid_time: 600
+- name: Install React global packages
+  npm:
+    executable: "{{ react_nvm_npm_path }}"
+    global: true
+    name: "{{ item }}"
+  delegate_to: 127.0.0.1
+  become_user: "{{ react_system_user }}"
+  with_items: "{{ react_system_wide_dependencies }}"
 
 - name: Ensure required directories are present
   file:
     state: directory
     owner: "{{ react_system_user }}"
-    group: www-data
+    group: "{{ react_system_group }}"
     path: "{{ item }}"
+  delegate_to: 127.0.0.1
+  become_user: "{{ react_system_user }}"
   when:
     - item is defined
     - item is not none
@@ -51,17 +38,6 @@
     - "{{ react_checkout_path }}"
     - "{{ react_system_user_home }}/.ssh"
 
-- name: Git clone without key
-  git:
-    accept_hostkey: "yes"
-    repo: "{{ react_git_url }}"
-    dest: "{{ react_checkout_path }}"
-    version: "{{ react_git_version }}"
-    depth: 1
-  become: True
-  become_user: "{{ react_system_user }}"
-  when:
-    - react_git_key is not defined or react_git_key is none
 
 - name: Copy git key
   copy:
@@ -69,20 +45,23 @@
     dest: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
     owner: "{{ react_system_user }}"
     mode: 0600
-  no_log: False
+  no_log: false
+  register: copied_git_key_file
+  delegate_to: 127.0.0.1
+  become_user: "{{ react_system_user }}"
   when:
     - react_git_key is defined
     - react_git_key is not none
 
-- name: Git clone with key
+- name: Git clone react repo
   git:
-    accept_hostkey: "yes"
+    accept_hostkey: true
     repo: "{{ react_git_url }}"
     dest: "{{ react_checkout_path }}"
     version: "{{ react_git_version }}"
     depth: 1
-    key_file: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
-  become: True
+    key_file: "{{ copied_git_key_file.dest | default('') }}"
+  delegate_to: 127.0.0.1
   become_user: "{{ react_system_user }}"
   when:
     - react_git_key is defined
@@ -92,9 +71,9 @@
   file:
     state: absent
     path: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
-  become: True
+  delegate_to: 127.0.0.1
   become_user: "{{ react_system_user }}"
   when:
     - react_git_key is defined
     - react_git_key is not none
-    - react_remove_git_key == True
+    - react_remove_git_key
