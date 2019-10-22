@@ -2,3 +2,4 @@
 *.log
 yarn.lock
 .vagrant/
+*.pyc
