@@ -8,14 +8,13 @@
     group: "{{ react_system_group }}"
 
 - name: Install Javascript requirements
-  shell: yarn install
-  args:
-    chdir: "{{ react_checkout_path }}"
+  yarn:
+    path: "{{ react_checkout_path }}"
   become: True
   become_user: "{{ react_system_user }}"
 
 - name: Compile Javascript
-  shell: yarn build
+  command: yarn build
   args:
     chdir: "{{ react_checkout_path }}"
   become: True
