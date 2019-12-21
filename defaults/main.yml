@@ -2,6 +2,7 @@
 react_system_user: "react"
 react_system_group: "www-data"
 react_system_user_home: "/home/{{ react_system_user }}"
+react_local_build_user: "{{ lookup('env','USER') }}"
 
 # git
 react_git_url:
@@ -9,6 +10,8 @@ react_git_version: "master"
 react_git_key:
 react_git_key_filename: "id_ed25519"
 react_remove_git_key: True
+
+react_remote_js_build: yes
 
 # system-wide dependencies
 react_system_wide_dependencies:
@@ -24,6 +27,7 @@ react_codebase_path: "{{ react_system_user_home }}/app"
 react_versioned_path: "{{ react_codebase_path }}-versioned"
 react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
 react_log_path: "/var/log/{{ react_app_name }}"
+react_local_checkout_path: "/tmp/{{ react_local_build_user }}/react/{{ react_git_version }}"
 
 # app settings
 react_app_settings:

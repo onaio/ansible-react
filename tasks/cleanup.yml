@@ -1,6 +1,6 @@
 ---
 - name: Get previous app deploy listing
-  shell: ls -tr1 chdir={{ react_versioned_path }}
+  command: ls -tr1 chdir={{ react_versioned_path }}
   register: versioned_list
 
 - name: Remove extra files from app directroy

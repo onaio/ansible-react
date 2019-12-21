@@ -7,24 +7,27 @@
     append: yes
     createhome: yes
 
-- name: Add yarn apt key
-  shell: curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  become: True
-  become_user: root
-  args:
-    warn: no
+- name: Remote JS build setup
+  block:
+    - name: Add yarn apt key
+      shell: curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      become: true
+      become_user: root
+      args:
+        warn: no
 
-- name: Add yarn to sources
-  shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  become: True
-  become_user: root
+    - name: Add yarn to sources
+      shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      become: true
+      become_user: root
 
-- name: Download node
-  shell: curl -sL https://deb.nodesource.com/setup_{{ react_node_version }} | sudo -E bash -
-  become: True
-  become_user: root
-  args:
-    warn: no
+    - name: Download node
+      shell: curl -sL https://deb.nodesource.com/setup_{{ react_node_version }} | sudo -E bash -
+      become: true
+      become_user: root
+      args:
+        warn: no
+  when: "react_remote_js_build|bool"
 
 - name: Update apt cache
   apt:
@@ -33,7 +36,6 @@
 - name: Install system-wide dependencies
   apt:
     name: "{{ react_system_wide_dependencies }}"
-    state: latest
     update_cache: yes
     cache_valid_time: 600
 
@@ -51,50 +53,69 @@
     - "{{ react_checkout_path }}"
     - "{{ react_system_user_home }}/.ssh"
 
-- name: Git clone without key
-  git:
-    accept_hostkey: "yes"
-    repo: "{{ react_git_url }}"
-    dest: "{{ react_checkout_path }}"
-    version: "{{ react_git_version }}"
-    depth: 1
-  become: True
-  become_user: "{{ react_system_user }}"
-  when:
-    - react_git_key is not defined or react_git_key is none
+- name: Remote Git clone
+  block:
+    - name: Git clone without key
+      git:
+        accept_hostkey: "yes"
+        repo: "{{ react_git_url }}"
+        dest: "{{ react_checkout_path }}"
+        version: "{{ react_git_version }}"
+        depth: 1
+      become: true
+      become_user: "{{ react_system_user }}"
+      when:
+        - react_git_key is not defined or react_git_key is none
 
-- name: Copy git key
-  copy:
-    content: "{{ react_git_key }}"
-    dest: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
-    owner: "{{ react_system_user }}"
-    mode: 0600
-  no_log: False
-  when:
-    - react_git_key is defined
-    - react_git_key is not none
+    - name: Copy git key
+      copy:
+        content: "{{ react_git_key }}"
+        dest: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
+        owner: "{{ react_system_user }}"
+        mode: 0600
+      no_log: false
+      when:
+        - react_git_key is defined
+        - react_git_key is not none
 
-- name: Git clone with key
-  git:
-    accept_hostkey: "yes"
-    repo: "{{ react_git_url }}"
-    dest: "{{ react_checkout_path }}"
-    version: "{{ react_git_version }}"
-    depth: 1
-    key_file: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
-  become: True
-  become_user: "{{ react_system_user }}"
-  when:
-    - react_git_key is defined
-    - react_git_key is not none
+    - name: Git clone with key
+      git:
+        accept_hostkey: "yes"
+        repo: "{{ react_git_url }}"
+        dest: "{{ react_checkout_path }}"
+        version: "{{ react_git_version }}"
+        depth: 1
+        key_file: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
+      become: true
+      become_user: "{{ react_system_user }}"
+      when:
+        - react_git_key is defined
+        - react_git_key is not none
 
-- name: Remove Git Key
-  file:
-    state: absent
-    path: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
-  become: True
-  become_user: "{{ react_system_user }}"
-  when:
-    - react_git_key is defined
-    - react_git_key is not none
-    - react_remove_git_key == True
+    - name: Remove Git Key
+      file:
+        state: absent
+        path: "{{ react_system_user_home }}/.ssh/{{ react_git_key_filename }}"
+      become: true
+      become_user: "{{ react_system_user }}"
+      when:
+        - react_git_key is defined
+        - react_git_key is not none
+        - react_remove_git_key
+  when: "react_remote_js_build|bool"
+
+- name: React JS local Git clone
+  block:
+    - name: Git clone local
+      git:
+        accept_hostkey: "yes"
+        repo: "{{ react_git_url }}"
+        dest: "{{ react_local_checkout_path }}"
+        version: "{{ react_git_version }}"
+        depth: 1
+        force: yes
+      become: false
+      delegate_to: 127.0.0.1
+      remote_user: "{{ react_local_build_user }}"
+
+  when: "not react_remote_js_build|bool"
