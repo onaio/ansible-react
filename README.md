@@ -12,6 +12,8 @@ We only install and configure:
 - yarn
 - and of course all the javascript packages that your project uses
 
+`NodeJS` and `yarn` will only be installed on the target server if `react_remote_js_build: yes` which is the case by default. When `react_remote_js_build: no`  the build occurs locally and assumes that you have installed `NodeJS` and `yarn`.
+
 We intentionally consider the installation and configuration of web servers, and other things as out of scope for this role.  Therefore, naturally this role is to be used in a playbook that installs and configures those other things, if you need them.
 
 ## Role Variables
