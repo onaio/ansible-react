@@ -4,8 +4,15 @@
   tags:
     - install
 
-- name: Configure react app
-  include_tasks: configure.yml
+- name: Configure react app remote
+  include_tasks: compile-remote.yml
+  when: react_remote_js_build|bool
+  tags:
+    - configure
+
+- name: Configure react app local
+  include_tasks: compile-local.yml
+  when: not react_remote_js_build|bool
   tags:
     - configure
 
