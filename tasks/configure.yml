@@ -2,7 +2,7 @@
 - name: Copy environment variables file
   template:
     src: env.j2
-    dest: "{{ react_checkout_path }}/.env"
+    dest: "{{ react_app_path }}/.env"
     mode: 0644
     owner: "{{ react_system_user }}"
     group: "{{ react_system_group }}"
@@ -10,14 +10,14 @@
 - name: Install Javascript requirements
   shell: yarn install
   args:
-    chdir: "{{ react_checkout_path }}"
+    chdir: "{{ react_app_path }}"
   become: True
   become_user: "{{ react_system_user }}"
 
 - name: Compile Javascript
   shell: yarn build
   args:
-    chdir: "{{ react_checkout_path }}"
+    chdir: "{{ react_app_path }}"
   become: True
   become_user: "{{ react_system_user }}"
 
