@@ -16,9 +16,12 @@ react_remote_js_build: yes
 # system-wide dependencies
 react_system_wide_dependencies:
   - git
-  - nodejs
-  - yarn
 react_node_version: 10.x
+
+# NVM
+react_nvm_root: "{{ react_system_user_home }}/.nvm"
+react_node_dir: "{{ react_nvm_root }}/versions/node/{{ react_node_version }}"
+react_npm_path: "{{ react_node_dir }}/bin/npm"
 
 # app
 react_env_name: "prod"

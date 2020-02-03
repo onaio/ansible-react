@@ -8,3 +8,12 @@ galaxy_info:
   - name: Ubuntu
     versions:
       - all
+
+dependencies:
+  - role: onaio.nvm
+    nvm_user: "{{ react_system_user }}"
+    nvm_group: "{{ react_system_group }}"
+    nvm_node_version: "{{ react_node_version }}"
+    nvm_install_path: "{{ react_nvm_root }}"
+    nvm_node_dir: "{{ react_node_dir }}"
+    nvm_npm_path: "{{ react_npm_path }}"
