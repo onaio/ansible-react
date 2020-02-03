@@ -3,6 +3,7 @@ react_system_user: "react"
 react_system_group: "www-data"
 react_system_user_home: "/home/{{ react_system_user }}"
 react_local_build_user: "{{ lookup('env','USER') }}"
+react_local_build_path: "{{ react_local_checkout_path }}/build"
 
 # git
 react_git_url:

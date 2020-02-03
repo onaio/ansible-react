@@ -22,14 +22,14 @@
 
 - name: Compress Build folder
   archive:
-    path: "{{ react_local_checkout_path }}/build"
-    dest: "{{ react_local_checkout_path }}/build.tgz"
+    path: "{{ react_local_build_path }}"
+    dest: "{{ react_local_build_path }}.tgz"
   become: false
   delegate_to: 127.0.0.1
 
 - name: UnCompress Build folder
   unarchive:
-    src: "{{ react_local_checkout_path }}/build.tgz"
+    src: "{{ react_local_build_path }}.tgz"
     dest: "{{ react_checkout_path }}"
   become: True
   become_user: "{{ react_system_user }}"
