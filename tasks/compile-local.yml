@@ -7,16 +7,20 @@
   become: false
 
 - name: Install Javascript requirements
-  command: yarn install
+  shell: "yarn install"
   args:
     chdir: "{{ react_local_checkout_path }}"
+  environment:
+    PATH: "$PATH:{{ react_local_yarn_binary_dir }}"
   become: false
   delegate_to: 127.0.0.1
 
 - name: Compile Javascript
-  command: yarn build
+  shell: "yarn build"
   args:
     chdir: "{{ react_local_checkout_path }}"
+  environment:
+    PATH: "$PATH:{{ react_local_yarn_binary_dir }}"
   become: false
   delegate_to: 127.0.0.1
 
