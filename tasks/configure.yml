@@ -1,24 +1,81 @@
 ---
-- name: Copy environment variables file
-  template:
-    src: env.j2
-    dest: "{{ react_checkout_path }}/.env"
-    mode: 0644
-    owner: "{{ react_system_user }}"
-    group: "{{ react_system_group }}"
+- name : configure build locally
+  block: 
+    - name: Copy environment variables file locally
+      template:
+        src: env.j2
+        dest: "{{ react_local_checkout_path }}/.env"
+        mode: 0644
+      delegate_to: localhost
 
-- name: Install Javascript requirements
-  yarn:
-    path: "{{ react_checkout_path }}"
-  become: True
-  become_user: "{{ react_system_user }}"
+    - name: Install Javascript requirements locally
+      yarn:
+        path: "{{ react_local_checkout_path }}"
+        production: false
+      delegate_to: localhost
 
-- name: Compile Javascript
-  command: yarn build
-  args:
-    chdir: "{{ react_checkout_path }}"
-  become: True
-  become_user: "{{ react_system_user }}"
+    - name: Compile Javascript locally
+      command: yarn build
+      args:
+        chdir: "{{ react_local_checkout_path }}"
+      delegate_to: localhost
+
+    - name: Compress Build folder locally
+      archive:
+        path: "{{ react_local_checkout_path }}"
+        dest: "{{ react_local_checkout_path }}.tgz"
+      become: false
+      delegate_to: localhost
+
+    - name: UnCompress Build folder locally
+      unarchive:
+        src: "{{ react_local_checkout_path }}.tgz"
+        dest: "{{ react_checkout_path }}"
+      become: True
+      become_user: "{{ react_system_user }}"
+  when: "not react_remote_js_build|bool"
+
+- name: configure build remotely
+  block:
+    - name: Copy environment variables file 
+      template:
+        src: env.j2
+        dest: "{{ react_local_checkout_path }}/.env"
+        mode: 0644
+      delegate_to: localhost
+      # owner: "{{ react_system_user }}"
+      # group: "{{ react_system_group }}"
+
+    - name: Install Javascript requirements
+      yarn:
+        path: "{{ react_local_checkout_path }}"
+        production: false
+      delegate_to: localhost
+      become: True
+      become_user: "{{ react_system_user }}"
+
+    - name: Compile Javascript
+      command: yarn build
+      args:
+        chdir: "{{ react_local_checkout_path }}"
+      delegate_to: localhost
+      become: True
+      become_user: "{{ react_system_user }}"
+
+    - name: Compress Build folder
+      archive:
+        path: "{{ react_local_checkout_path }}"
+        dest: "{{ react_local_checkout_path }}.tgz"
+      become: false
+      delegate_to: localhost
+
+    - name: UnCompress Build folder
+      unarchive:
+        src: "{{ react_local_checkout_path }}.tgz"
+        dest: "{{ react_checkout_path }}"
+      become: True
+      become_user: "{{ react_system_user }}"
+  when: "react_remote_js_build|bool"
 
 - name: Make the new codebase current
   file:

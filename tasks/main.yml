@@ -1,5 +1,5 @@
 ---
-- name: Install react app
+- name: Install React app using local build
   include_tasks: install.yml
   tags:
     - install
@@ -9,7 +9,7 @@
   tags:
     - configure
 
-- name: Cleanup
-  include_tasks: cleanup.yml
-  tags:
-    - cleanup
+# - name: Cleanup
+#   include_tasks: cleanup.yml
+#   tags:
+#     - cleanup
