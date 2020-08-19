@@ -6,17 +6,23 @@ yarn_install_destination: ""
 react_system_user: "react"
 react_system_group: "www-data"
 react_system_user_home: "/home/{{ react_system_user }}"
+react_local_user_home: "/home/peter"
+react_local_build_user: "{{ lookup('env','USER') }}"
 
 # NVM
+react_nvm_local_nvm_root: "{{ react_local_user_home }}/.nvm"
+react_nvm_local_node_dir: "/home/peter/.nvm/versions/node/v12.16.3/bin/node"
+react_nvm_local_npm_path: "/home/peter/.nvm/versions/node/v12.16.3/bin/npm"
 react_nvm_node_version: "{{ react_node_version }}"
 react_nvm_nvm_root:  "{{ react_system_user_home }}/.nvm"
 react_nvm_node_dir: "{{ react_nvm_nvm_root }}/versions/node/{{ react_nvm_node_version }}"
-react_nvm_npm_path: "{{ react_node_dir }}/bin/npm"
-react_nvm_version: "v0.34.0"
+react_nvm_npm_path: "{{ react_nvm_node_dir }}/bin/npm"
+react_nvm_version: "v0.35.3"
+react_nvm_download_path: "{{ react_local_user_home }}"
 
 # git
 react_git_url:
-react_git_version: "master"
+react_git_version: "v0.6.2-rc1"
 react_git_key:
 react_git_key_filename: "id_ed25519"
 react_remove_git_key: true
@@ -27,6 +33,8 @@ react_system_wide_dependencies:
 react_node_version: 10.x
 
 # app
+react_remote_js_build: False
+react_local_checkout_path: '/tmp/reveal'
 react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"
 react_codebase_path: "{{ react_system_user_home }}/app"
@@ -34,7 +42,29 @@ react_versioned_path: "{{ react_codebase_path }}-versioned"
 react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
 react_app_path: "{{ react_checkout_path }}"
 react_log_path: "/var/log/{{ react_app_name }}"
+react_max_versioned_folders: 10
+
+# deployment
+deployed_site_name: "web.reveal-stage.smartregister.org"
 
 # app settings
 react_app_settings:
-  REACT_APP_WEBSITE_NAME: 'React Example App'
+  GENERATE_SOURCEMAP: 'false'
+  SKIP_PREFLIGHT_CHECK: 'true'
+  REACT_APP_DOMAIN_NAME: "https://{{ deployed_site_name }}"
+  REACT_APP_WEBSITE_NAME: Reveal
+  REACT_APP_THEME_COLOR: 000000
+  REACT_APP_LANGUAGE: "en"
+  REACT_APP_GA_CODE: "UA-156670499-1"
+  REACT_APP_ENABLE_IRS: "true"
+  REACT_APP_ENABLE_FI: "false"
+  REACT_APP_ENABLE_USERS: "false"
+  REACT_APP_ENABLE_ASSIGN: "true"
+  REACT_APP_ENABLE_ABOUT: "false"
+  REACT_APP_ENABLE_TEAMS: "true"
+  REACT_APP_ENABLE_PRACTITIONERS: "true"
+  REACT_APP_ENABLE_MDA_POINT: "false"
+  REACT_APP_ENABLE_POPULATION_SERVER_SETTINGS: "false"
+  REACT_APP_ENABLE_PLANNING: "true"
+  REACT_APP_ENABLE_JURISDICTION_METADATA_UPLOAD: "true"
+  REACT_APP_ENABLE_CONFIG_FORM: "true"
