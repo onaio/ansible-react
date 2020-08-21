@@ -6,19 +6,19 @@ yarn_install_destination: ""
 react_system_user: "react"
 react_system_group: "www-data"
 react_system_user_home: "/home/{{ react_system_user }}"
-react_local_user_home: "/home/peter"
+react_local_user_home: "{{ lookup('env', 'HOME') }}"
 react_local_build_user: "{{ lookup('env','USER') }}"
 
 # NVM
-react_nvm_local_nvm_root: "{{ react_local_user_home }}/.nvm"
-react_nvm_local_node_dir: "/home/peter/.nvm/versions/node/v12.16.3/bin/node"
-react_nvm_local_npm_path: "/home/peter/.nvm/versions/node/v12.16.3/bin/npm"
-react_nvm_node_version: "{{ react_node_version }}"
-react_nvm_nvm_root:  "{{ react_system_user_home }}/.nvm"
-react_nvm_node_dir: "{{ react_nvm_nvm_root }}/versions/node/{{ react_nvm_node_version }}"
-react_nvm_npm_path: "{{ react_nvm_node_dir }}/bin/npm"
-react_nvm_version: "v0.35.3"
-react_nvm_download_path: "{{ react_local_user_home }}"
+# react_nvm_local_nvm_root: "{{ react_local_user_home }}/.nvm"
+# react_nvm_local_node_dir: "/home/peter/.nvm/versions/node/v12.16.3/bin/node"
+# react_nvm_local_npm_path: "/home/peter/.nvm/versions/node/v12.16.3/bin/npm"
+# react_nvm_node_version: "{{ react_node_version }}"
+# react_nvm_nvm_root:  "{{ react_system_user_home }}/.nvm"
+# react_nvm_node_dir: "{{ react_nvm_nvm_root }}/versions/node/{{ react_nvm_node_version }}"
+# react_nvm_npm_path: "{{ react_nvm_node_dir }}/bin/npm"
+# react_nvm_version: "v0.35.3"
+# react_nvm_download_path: "{{ react_local_user_home }}"
 
 # git
 react_git_url:
@@ -34,7 +34,7 @@ react_node_version: 10.x
 
 # app
 react_remote_js_build: False
-react_local_checkout_path: '/tmp/reveal'
+react_local_checkout_path: '{{ react_local_user_home }}/reveal'
 react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"
 react_codebase_path: "{{ react_system_user_home }}/app"
