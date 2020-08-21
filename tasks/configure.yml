@@ -42,8 +42,6 @@
         src: env.j2
         dest: "{{ react_local_checkout_path }}/.env"
         mode: 0644
-      owner: "{{ react_system_user }}"
-      group: "{{ react_system_group }}"
 
     - name: Install Javascript requirements
       yarn:
@@ -58,6 +56,7 @@
         chdir: "{{ react_local_checkout_path }}"
       become: True
       become_user: "{{ react_system_user }}"
+
   when: "react_remote_js_build|bool"
 
 - name: Make the new codebase current
