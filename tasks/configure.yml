@@ -7,25 +7,32 @@
         dest: "{{ react_local_checkout_path }}/.env"
         mode: 0644
       delegate_to: localhost
+      become: True
+      become_user: "{{ react_local_build_user }}"
 
     - name: Install Javascript requirements locally
       yarn:
         path: "{{ react_local_checkout_path }}"
         production: false
       delegate_to: localhost
+      become: True
+      become_user: "{{ react_local_build_user }}"
 
     - name: Compile Javascript locally
       command: yarn build
       args:
         chdir: "{{ react_local_checkout_path }}"
       delegate_to: localhost
+      become: True
+      become_user: "{{ react_local_build_user }}"
 
     - name: Compress Build folder locally
       archive:
-        path: "{{ react_local_checkout_path }}"
+        path: "{{ react_local_checkout_path }}/"
         dest: "{{ react_local_checkout_path }}.tgz"
-      become: false
       delegate_to: localhost
+      become: True
+      become_user: "{{ react_local_build_user }}"
 
     - name: UnCompress Build folder locally
       unarchive:
