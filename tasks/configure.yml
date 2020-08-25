@@ -1,6 +1,6 @@
 ---
-- name : configure build locally
-  block: 
+- name: configure build locally
+  block:
     - name: Copy environment variables file locally
       template:
         src: env.j2
@@ -8,7 +8,7 @@
         mode: 0644
       delegate_to: localhost
       become: True
-      become_user: "{{ react_local_build_user }}"
+      become_user: "{{ react_local_user }}"
 
     - name: Install Javascript requirements locally
       yarn:
@@ -16,7 +16,7 @@
         production: false
       delegate_to: localhost
       become: True
-      become_user: "{{ react_local_build_user }}"
+      become_user: "{{ react_local_user }}"
 
     - name: Compile Javascript locally
       command: yarn build
@@ -24,7 +24,15 @@
         chdir: "{{ react_local_checkout_path }}"
       delegate_to: localhost
       become: True
-      become_user: "{{ react_local_build_user }}"
+      become_user: "{{ react_local_user }}"
+
+    - name: Remove node_modules before compression
+      file:
+        path: "{{ react_local_checkout_path }}/node_modules"
+        state: absent
+      delegate_to: localhost
+      become: True
+      become_user: "{{ react_local_user }}"
 
     - name: Compress Build folder locally
       archive:
@@ -32,9 +40,9 @@
         dest: "{{ react_local_checkout_path }}.tgz"
       delegate_to: localhost
       become: True
-      become_user: "{{ react_local_build_user }}"
+      become_user: "{{ react_local_user }}"
 
-    - name: UnCompress Build folder locally
+    - name: UnCompress Build folder to remote host
       unarchive:
         src: "{{ react_local_checkout_path }}.tgz"
         dest: "{{ react_checkout_path }}"
@@ -44,15 +52,15 @@
 
 - name: configure build remotely
   block:
-    - name: Copy environment variables file 
+    - name: Copy environment variables file
       template:
         src: env.j2
-        dest: "{{ react_local_checkout_path }}/.env"
+        dest: "{{ react_checkout_path }}/.env"
         mode: 0644
 
     - name: Install Javascript requirements
       yarn:
-        path: "{{ react_local_checkout_path }}"
+        path: "{{ react_checkout_path }}"
         production: false
       become: True
       become_user: "{{ react_system_user }}"
@@ -60,7 +68,7 @@
     - name: Compile Javascript
       command: yarn build
       args:
-        chdir: "{{ react_local_checkout_path }}"
+        chdir: "{{ react_checkout_path }}"
       become: True
       become_user: "{{ react_system_user }}"
 
