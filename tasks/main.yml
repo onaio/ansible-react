@@ -9,7 +9,7 @@
   tags:
     - configure
 
-# - name: Cleanup
-#   include_tasks: cleanup.yml
-#   tags:
-#     - cleanup
+- name: Cleanup
+  include_tasks: cleanup.yml
+  tags:
+    - cleanup
