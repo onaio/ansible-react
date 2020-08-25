@@ -24,6 +24,9 @@ react_node_version: 10.x  # the version of node to install
 
 react_git_url: "https://github.com/onaio/kaznet-frontend.git"  # the git repo of your django app which we are installing
 react_git_key:
+
+react_remote_js_build: # whether to compile the app on the target host or on the controlling host. 
+# When compiling the app on the controlling host, you will need to make sure that node and yarn is installed.
 ```
 
 ### Custom environment variables
