@@ -7,7 +7,7 @@ react_local_user: "{{ lookup('env','USER') }}"
 
 # git
 react_git_url:
-react_git_version: "v0.6.2-rc1"
+react_git_version: "master"
 react_git_key:
 react_git_key_filename: "id_ed25519"
 react_remove_git_key: true
@@ -33,5 +33,6 @@ react_max_versioned_folders: 10
 
 # app settings
 react_app_settings:
+  REACT_APP_WEBSITE_NAME: 'React Example App'
   GENERATE_SOURCEMAP: "false"
   SKIP_PREFLIGHT_CHECK: "true"
