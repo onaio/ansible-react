@@ -11,7 +11,7 @@
   file:
     state: directory
     owner: "{{ react_system_user }}"
-    group: www-data
+    group: "{{ react_system_group }}"
     path: "{{ item }}"
   when:
     - item is defined
