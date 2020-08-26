@@ -21,10 +21,12 @@
   vars:
     react_system_user: "react_example_app"
     react_node_version: 10.x
-    react_git_url: "https://github.com/onaio/reveal-frontend.git"
-    react_git_version: "v0.6.2"
+    react_git_url: "https://github.com/onaio/kaznet-frontend.git"
+    react_git_version: "v0.0.1"
     react_app_settings:
       REACT_APP_WEBSITE_NAME: 'Example App'
+      GENERATE_SOURCEMAP: "false"
+      SKIP_PREFLIGHT_CHECK: "true"
       SOMETHING_ELSE: "you can put anything here"
   gather_facts: True
   become: True
