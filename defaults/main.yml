@@ -22,7 +22,7 @@ react_node_version: 10.x
 
 # app
 react_remote_js_build: True
-react_local_checkout_path: "{{ react_local_user_home }}/reveal"
+react_local_checkout_path: "/tmp/reveal"
 react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"
 react_codebase_path: "{{ react_system_user_home }}/app"
