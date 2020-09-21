@@ -3,19 +3,21 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
 platforms:
-  - name: ubuntu-16.04
-    image: solita/ubuntu-systemd:16.04
+  - name: ubuntu-18.04
+    image: solita/ubuntu-systemd:18.04
     privileged: true
     command: /sbin/init
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    enabled: false
+  playbook:
+    prepare: prepare.yml
+  options:
+    verbose: True
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8

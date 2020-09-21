@@ -7,12 +7,12 @@
         test -e /usr/bin/python || \
         (apt -y update && apt install -y  python-minimal)
       register: output
-      changed_when: output.stdout|trim() != ""
+      changed_when: output.stdout|trim()|bool
     - name: Install sudo if not there
       raw: |
         test -e /usr/bin/sudo || apt install -y sudo
       register: output
-      changed_when: output.stdout|trim() != ""
+      changed_when: output.stdout|trim()|bool
   gather_facts: False
   become: True
 
@@ -21,10 +21,12 @@
   vars:
     react_system_user: "react_example_app"
     react_node_version: 10.x
-    react_git_url: "https://github.com/onaio/kaznet-frontend"
-    react_git_version: "v1.0.4"
+    react_git_url: "https://github.com/onaio/kaznet-frontend.git"
+    react_git_version: "v0.0.1"
     react_app_settings:
       REACT_APP_WEBSITE_NAME: 'Example App'
+      GENERATE_SOURCEMAP: "false"
+      SKIP_PREFLIGHT_CHECK: "true"
       SOMETHING_ELSE: "you can put anything here"
   gather_facts: True
   become: True

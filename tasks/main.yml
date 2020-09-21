@@ -1,5 +1,5 @@
 ---
-- name: Install react app
+- name: Install React app using local build
   include_tasks: install.yml
   tags:
     - install
