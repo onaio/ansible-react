@@ -16,8 +16,21 @@ provisioner:
     verbose: True
 verifier:
   name: testinfra
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
 lint: |
   set -e
   yamllint .
-  ansible-lint
   flake8
