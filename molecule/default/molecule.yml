@@ -9,6 +9,7 @@ platforms:
     privileged: true
     command: /sbin/init
 provisioner:
+  log: True
   name: ansible
   playbook:
     prepare: prepare.yml
