@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           docker --version
+          apt install python-docker
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Test with molecule
