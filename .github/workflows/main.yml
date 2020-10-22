@@ -13,6 +13,7 @@ jobs:
         python-version: [3.6]
 
     steps:
+      - uses: docker-practice/actions-setup-docker@master
       - uses: actions/checkout@v1
         with:
           path: "${{ github.repository }}"
