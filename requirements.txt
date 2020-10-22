@@ -1,4 +1,4 @@
-molecule[docker]
-flake8
+molecule[docker]==3.1.4
+flake8==3.7.9
 yamllint==1.20.0
 testinfra==4.1.0
