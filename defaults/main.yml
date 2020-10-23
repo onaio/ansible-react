@@ -1,3 +1,4 @@
+---
 # user
 react_system_user: "react"
 react_system_group: "www-data"
@@ -21,7 +22,7 @@ react_local_system_wide_dependencies:
 react_node_version: 10.x
 
 # app
-react_remote_js_build: True
+react_remote_js_build: true
 react_local_checkout_path: "/tmp/{{ react_local_user }}/reveal"
 react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"

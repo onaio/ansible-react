@@ -38,7 +38,7 @@
         dest: "{{ react_local_checkout_path }}"
         version: "{{ react_git_version }}"
         depth: 1
-        force: yes
+        force: true
       become: true
       delegate_to: localhost
       become_user: "{{ react_local_user }}"

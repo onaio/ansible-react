@@ -13,4 +13,4 @@
         react_app_settings:
           GENERATE_SOURCEMAP: "false"
           SKIP_PREFLIGHT_CHECK: "true"
-        react_remote_js_build: False
+        react_remote_js_build: false

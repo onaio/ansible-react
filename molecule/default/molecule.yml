@@ -9,12 +9,12 @@ platforms:
     privileged: true
     command: /sbin/init
 provisioner:
-  log: True
+  log: true
   name: ansible
   playbook:
     prepare: prepare.yml
   options:
-    verbose: True
+    verbose: true
 verifier:
   name: testinfra
 scenario:
