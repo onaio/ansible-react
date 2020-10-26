@@ -1,23 +1,29 @@
+---
 # user
 react_system_user: "react"
 react_system_group: "www-data"
 react_system_user_home: "/home/{{ react_system_user }}"
+react_local_user_home: "{{ lookup('env', 'HOME') }}"
+react_local_user: "{{ lookup('env','USER') }}"
 
 # git
 react_git_url:
 react_git_version: "master"
 react_git_key:
 react_git_key_filename: "id_ed25519"
-react_remove_git_key: True
+react_remove_git_key: true
 
 # system-wide dependencies
-react_system_wide_dependencies:
-  - git
-  - nodejs
+react_remote_system_wide_dependencies:
   - yarn
+  - git
+react_local_system_wide_dependencies:
+  - git
 react_node_version: 10.x
 
 # app
+react_remote_js_build: true
+react_local_checkout_path: "/tmp/{{ react_local_user }}/reveal"
 react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"
 react_codebase_path: "{{ react_system_user_home }}/app"
@@ -25,7 +31,10 @@ react_versioned_path: "{{ react_codebase_path }}-versioned"
 react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
 react_app_path: "{{ react_checkout_path }}"
 react_log_path: "/var/log/{{ react_app_name }}"
+react_max_versioned_folders: 10
 
 # app settings
 react_app_settings:
   REACT_APP_WEBSITE_NAME: 'React Example App'
+  GENERATE_SOURCEMAP: "false"
+  SKIP_PREFLIGHT_CHECK: "true"

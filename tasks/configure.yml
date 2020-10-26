@@ -1,31 +1,84 @@
 ---
-- name: Copy environment variables file
-  template:
-    src: env.j2
-    dest: "{{ react_app_path }}/.env"
-    mode: 0644
-    owner: "{{ react_system_user }}"
-    group: "{{ react_system_group }}"
+- name: configure build locally
+  block:
+    - name: Copy environment variables file locally
+      template:
+        src: env.j2
+        dest: "{{ react_local_checkout_path }}/.env"
+        mode: 0644
+      delegate_to: localhost
+      become: true
+      become_user: "{{ react_local_user }}"
 
-- name: Install Javascript requirements
-  shell: yarn install
-  args:
-    chdir: "{{ react_app_path }}"
-  become: True
-  become_user: "{{ react_system_user }}"
+    - name: Install Javascript requirements locally
+      yarn:
+        path: "{{ react_local_checkout_path }}"
+        production: false
+      delegate_to: localhost
+      become: true
+      become_user: "{{ react_local_user }}"
 
-- name: Compile Javascript
-  shell: yarn build
-  args:
-    chdir: "{{ react_app_path }}"
-  become: True
-  become_user: "{{ react_system_user }}"
+    - name: Compile Javascript locally
+      command: yarn build
+      args:
+        chdir: "{{ react_local_checkout_path }}"
+      delegate_to: localhost
+      become: true
+      become_user: "{{ react_local_user }}"
+
+    - name: Remove node_modules before compression
+      file:
+        path: "{{ react_local_checkout_path }}/node_modules"
+        state: absent
+      delegate_to: localhost
+      become: true
+      become_user: "{{ react_local_user }}"
+
+    - name: Compress Build folder locally
+      archive:
+        path: "{{ react_local_checkout_path }}/"
+        dest: "{{ react_local_checkout_path }}.tgz"
+      delegate_to: localhost
+      become: true
+      become_user: "{{ react_local_user }}"
+
+    - name: UnCompress Build folder to remote host
+      unarchive:
+        src: "{{ react_local_checkout_path }}.tgz"
+        dest: "{{ react_checkout_path }}"
+      become: true
+      become_user: "{{ react_system_user }}"
+  when: "not react_remote_js_build|bool"
+
+- name: configure build remotely
+  block:
+    - name: Copy environment variables file
+      template:
+        src: env.j2
+        dest: "{{ react_checkout_path }}/.env"
+        mode: 0644
+
+    - name: Install Javascript requirements
+      yarn:
+        path: "{{ react_checkout_path }}"
+        production: false
+      become: true
+      become_user: "{{ react_system_user }}"
+
+    - name: Compile Javascript
+      command: yarn build
+      args:
+        chdir: "{{ react_checkout_path }}"
+      become: true
+      become_user: "{{ react_system_user }}"
+
+  when: "react_remote_js_build|bool"
 
 - name: Make the new codebase current
   file:
     src: "{{ react_checkout_path }}"
     dest: "{{ react_codebase_path }}"
     state: link
-    force: yes
+    force: true
     owner: "{{ react_system_user }}"
     group: "{{ react_system_group }}"

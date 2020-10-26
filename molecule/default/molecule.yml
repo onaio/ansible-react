@@ -1,0 +1,37 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: ubuntu-18.04
+    image: solita/ubuntu-systemd:18.04
+    privileged: true
+    command: /sbin/init
+provisioner:
+  log: true
+  name: ansible
+  playbook:
+    prepare: prepare.yml
+  options:
+    verbose: true
+verifier:
+  name: testinfra
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
+lint: |
+  set -e
+  yamllint .
+  flake8
