@@ -23,7 +23,7 @@ react_node_version: 10.x
 
 # app
 react_remote_js_build: true
-react_local_checkout_path: "/tmp/{{ react_local_user }}/reveal"
+react_local_checkout_path: "/tmp/react/{{ ansible_date_time['epoch'] }}"
 react_local_app_path: "{{ react_local_checkout_path }}"
 react_local_npm_package_paths:
   - "{{react_local_checkout_path}}"
