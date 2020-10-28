@@ -28,13 +28,24 @@
       become_user: "{{ react_local_user }}"
 
     - name: Remove node_modules before compression
-      file:
-        path: "{{ item }}/node_modules"
-        state: absent
-      delegate_to: localhost
-      become: true
-      become_user: "{{ react_local_user }}"
-      loop: "{{react_local_npm_package_paths}}"
+      block:
+        - name: Remove node_modules using lerna where possible
+          command: yarn lerna clean -y
+          args:
+            chdir: "{{ react_local_checkout_path }}"
+          ignore_errors: true
+          delegate_to: localhost
+          become: true
+          become_user: "{{ react_local_user }}"
+
+        - name: remove node_modules manually
+          file:
+            path: "{{ item }}/node_modules"
+            state: absent
+          delegate_to: localhost
+          become: true
+          become_user: "{{ react_local_user }}"
+          loop: "{{react_local_npm_package_paths}}"
 
     - name: Compress Build folder locally
       archive:

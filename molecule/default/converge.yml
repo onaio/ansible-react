@@ -8,9 +8,11 @@
         react_system_group: "www-data"
         react_system_user_home: "/home/{{ react_system_user }}"
         react_node_version: 10.x
-        react_git_url: "https://github.com/onaio/reveal-frontend"
-        react_git_version: "v0.6.2-rc1"
+        react_git_url: "https://github.com/OpenSRP/web.git"
+        react_git_version: "master"
         react_app_settings:
-          GENERATE_SOURCEMAP: "false"
+          GENERATE_SOUreact_local_checkout_pathRCEMAP: "false"
           SKIP_PREFLIGHT_CHECK: "true"
-        react_remote_js_build: false
+        react_remote_js_build: False
+        react_local_app_path: "{{ react_local_checkout_path }}/client"
+        react_app_path: "{{ react_checkout_path }}/client"
