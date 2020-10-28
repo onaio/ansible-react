@@ -4,7 +4,7 @@
     - name: Copy environment variables file locally
       template:
         src: env.j2
-        dest: "{{ react_local_checkout_path }}/.env"
+        dest: "{{ react_local_app_path }}/.env"
         mode: 0644
       delegate_to: localhost
       become: true
@@ -12,27 +12,29 @@
 
     - name: Install Javascript requirements locally
       yarn:
-        path: "{{ react_local_checkout_path }}"
+        path: "{{ item }}"
         production: false
       delegate_to: localhost
       become: true
       become_user: "{{ react_local_user }}"
+      loop: "{{react_local_npm_package_paths}}"
 
     - name: Compile Javascript locally
       command: yarn build
       args:
-        chdir: "{{ react_local_checkout_path }}"
+        chdir: "{{ react_local_app_path }}"
       delegate_to: localhost
       become: true
       become_user: "{{ react_local_user }}"
 
     - name: Remove node_modules before compression
       file:
-        path: "{{ react_local_checkout_path }}/node_modules"
+        path: "{{ item }}/node_modules"
         state: absent
       delegate_to: localhost
       become: true
       become_user: "{{ react_local_user }}"
+      loop: "{{react_local_npm_package_paths}}"
 
     - name: Compress Build folder locally
       archive:
@@ -55,15 +57,16 @@
     - name: Copy environment variables file
       template:
         src: env.j2
-        dest: "{{ react_checkout_path }}/.env"
+        dest: "{{ react_app_path }}/.env"
         mode: 0644
 
     - name: Install Javascript requirements
       yarn:
-        path: "{{ react_checkout_path }}"
+        path: "{{ item }}"
         production: false
       become: true
       become_user: "{{ react_system_user }}"
+      loop: "{{react_npm_package_paths}}"
 
     - name: Compile Javascript
       command: yarn build

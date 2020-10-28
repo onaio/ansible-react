@@ -24,12 +24,22 @@ react_node_version: 10.x
 # app
 react_remote_js_build: true
 react_local_checkout_path: "/tmp/{{ react_local_user }}/reveal"
+react_local_app_path: "{{ react_local_checkout_path }}"
+react_local_npm_package_paths:
+  - "{{react_local_checkout_path}}"
+  - "{{react_local_app_path}}"
 react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"
 react_codebase_path: "{{ react_system_user_home }}/app"
 react_versioned_path: "{{ react_codebase_path }}-versioned"
+# where the repository is cloned
 react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
+# where the actual app package is
 react_app_path: "{{ react_checkout_path }}"
+# packages whose npms dependencies need to be installed
+react_npm_package_paths:
+  - "{{react_checkout_path}}"
+  - "{{react_app_path}}"
 react_log_path: "/var/log/{{ react_app_name }}"
 react_max_versioned_folders: 10
 
