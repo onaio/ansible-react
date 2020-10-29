@@ -13,6 +13,6 @@
         react_app_settings:
           GENERATE_SOUreact_local_checkout_pathRCEMAP: "false"
           SKIP_PREFLIGHT_CHECK: "true"
-        react_remote_js_build: False
+        react_remote_js_build: false
         react_local_app_path: "{{ react_local_checkout_path }}/client"
         react_app_path: "{{ react_checkout_path }}/client"
