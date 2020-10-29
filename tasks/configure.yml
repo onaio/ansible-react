@@ -12,17 +12,16 @@
 
     - name: Install Javascript requirements locally
       yarn:
-        path: "{{ item }}"
+        path: "{{ react_local_checkout_path }}"
         production: false
       delegate_to: localhost
       become: true
       become_user: "{{ react_local_user }}"
-      loop: "{{react_local_npm_package_paths}}"
 
     - name: Compile Javascript locally
       command: yarn build
       args:
-        chdir: "{{ react_local_app_path }}"
+        chdir: "{{ react_local_checkout_path }}"
       delegate_to: localhost
       become: true
       become_user: "{{ react_local_user }}"
@@ -40,12 +39,11 @@
 
         - name: remove node_modules manually
           file:
-            path: "{{ item }}/node_modules"
+            path: "{{ react_checkout_path }}/node_modules"
             state: absent
           delegate_to: localhost
           become: true
           become_user: "{{ react_local_user }}"
-          loop: "{{react_local_npm_package_paths}}"
 
     - name: Compress Build folder locally
       archive:
@@ -73,11 +71,10 @@
 
     - name: Install Javascript requirements
       yarn:
-        path: "{{ item }}"
+        path: "{{ react_checkout_path }}"
         production: false
       become: true
       become_user: "{{ react_system_user }}"
-      loop: "{{react_npm_package_paths}}"
 
     - name: Compile Javascript
       command: yarn build
