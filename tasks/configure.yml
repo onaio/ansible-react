@@ -18,6 +18,15 @@
       become: true
       become_user: "{{ react_local_user }}"
 
+    - name: Transpile packages
+      command: yarn run lerna:prepublish
+      args:
+        chdir: "{{ react_local_checkout_path }}"
+      delegate_to: localhost
+      become: true
+      become_user: "{{ react_local_user }}"
+      ignore_errors: true
+
     - name: Compile Javascript locally
       command: yarn build
       args:
