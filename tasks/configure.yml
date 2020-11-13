@@ -26,6 +26,7 @@
       become: true
       become_user: "{{ react_local_user }}"
       ignore_errors: true
+      when: "react_transpile_packages"
 
     - name: Compile Javascript locally
       command: yarn build
