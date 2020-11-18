@@ -29,6 +29,7 @@ react_env_name: "prod"
 react_app_name: "{{ react_system_user }}"
 react_codebase_path: "{{ react_system_user_home }}/app"
 react_versioned_path: "{{ react_codebase_path }}-versioned"
+react_transpile_packages: true
 # where the repository is cloned
 react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
 # where the actual app package is
