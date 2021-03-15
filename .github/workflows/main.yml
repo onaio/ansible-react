@@ -13,6 +13,7 @@ jobs:
         python-version: [3.6]
 
     steps:
+      - uses: docker-practice/actions-setup-docker@master
       - uses: actions/checkout@v1
         with:
           path: "${{ github.repository }}"
@@ -22,7 +23,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          sudo apt install docker
+          docker --version
+          sudo apt-get update
+          sudo apt-get -qq -y install python-docker
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Test with molecule
