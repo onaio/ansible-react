@@ -15,7 +15,7 @@ provisioner:
     prepare: ../resources/playbooks/prepare.yml
     converge: converge.yml
   options:
-    vvv: False
+    vvv: false
 verifier:
   name: testinfra
   directory: ../resources/tests/
@@ -36,4 +36,4 @@ scenario:
 lint: |
   set -e
   yamllint .
-  flake8
+  ansible-lint .

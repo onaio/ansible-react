@@ -15,7 +15,7 @@ provisioner:
     prepare: ../resources/playbooks/prepare.yml
     converge: ../resources/playbooks/converge.yml
   options:
-    vvv: True
+    vvv: true
 verifier:
   name: testinfra
   directory: ../resources/tests/
