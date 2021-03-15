@@ -11,12 +11,14 @@ platforms:
 provisioner:
   log: true
   name: ansible
-  playbook:
-    prepare: prepare.yml
+  playbooks:
+    prepare: ../resources/playbooks/prepare.yml
+    converge: ../resources/playbooks/converge.yml
   options:
-    verbose: true
+    vvv: True
 verifier:
   name: testinfra
+  directory: ../resources/tests/
 scenario:
   test_sequence:
     - dependency
