@@ -1,4 +1,12 @@
 ---
+# react_build_cmds:
+#   - run: build                  # yarn command to run
+#     args: --production          # optional arguements to pass
+#     path: /var/www/myapp        # optional chdir path
+#     ignore_errors: yes          # optional don't fail on react errors
+#     env:                        # optional environment settings
+#       NODE_ENV: production
+
 # user
 react_system_user: "react"
 react_system_group: "www-data"
@@ -36,6 +44,11 @@ react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }
 react_app_path: "{{ react_checkout_path }}"
 react_log_path: "/var/log/{{ react_app_name }}"
 react_max_versioned_folders: 10
+react_build_cmds:
+  - run: build
+    path: "{{react_app_path}}"
+react_build_cmds_default_env: {}
+react_build_default_cmd: build
 
 # app settings
 react_app_settings:
