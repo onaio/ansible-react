@@ -1,6 +1,6 @@
 ---
 # react_build_cmds:
-#   - run: build                  # yarn command to run
+#   - cmd: build                  # yarn command to run
 #     args: --production          # optional arguements to pass
 #     path: /var/www/myapp        # optional chdir path
 #     ignore_errors: yes          # optional don't fail on react errors
@@ -44,7 +44,7 @@ react_app_path: "{{ react_checkout_path }}"
 react_log_path: "/var/log/{{ react_app_name }}"
 react_max_versioned_folders: 10
 react_build_cmds:
-  - run: build
+  - cmd: build
     path: "{{react_app_path}}"
 react_build_cmds_default_env: {}
 react_build_default_cmd: build
