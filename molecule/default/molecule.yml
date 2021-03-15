@@ -36,4 +36,4 @@ scenario:
 lint: |
   set -e
   yamllint .
-  flake8
+  ansible-lint .
