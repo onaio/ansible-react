@@ -36,6 +36,20 @@ react_app_path: "{{ react_checkout_path }}"
 react_log_path: "/var/log/{{ react_app_name }}"
 react_max_versioned_folders: 10
 
+# shows the full structure of the react_build_cmds variable
+# react_build_cmds:
+#   - cmd: build                  # yarn command to run
+#     args: --production          # optional arguments to pass
+#     path: /var/www/myapp        # optional chdir path
+#     ignore_errors: yes          # optional don't fail on yarn errors
+#     env:                        # optional environment settings
+#       NODE_ENV: production
+react_build_cmds:
+  - cmd: build
+    path: "{{react_app_path}}"
+react_build_cmds_default_env: {}
+react_build_default_cmd: build
+
 # app settings
 react_app_settings:
   REACT_APP_WEBSITE_NAME: 'React Example App'

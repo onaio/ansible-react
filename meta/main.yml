@@ -1,5 +1,7 @@
 ---
 galaxy_info:
+  role_name: react
+  namespace: "ona"
   author: Ona Engineering
   company: Ona Systems Inc
   description: Install and configure React

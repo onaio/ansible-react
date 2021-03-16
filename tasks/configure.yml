@@ -18,13 +18,17 @@
       become: true
       become_user: "{{ react_local_user }}"
 
-    - name: Compile Javascript locally
-      command: yarn build
-      args:
-        chdir: "{{ react_local_checkout_path }}"
-      delegate_to: localhost
-      become: true
+    - name: Build app locally
       become_user: "{{ react_local_user }}"
+      become: true
+      delegate_to: localhost
+      environment: "{{ item.env | default(react_build_cmds_default_env) }}"
+      command: "yarn {{ item.cmd | default(react_build_default_cmd) }} {{ item.args | default() }}"
+      register: yarn_build_result
+      args:
+        chdir: "{{ item.path | default(react_local_checkout_path) }}"
+      failed_when: "yarn_build_result.stderr is defined and yarn_build_result.stderr.find('error ') != -1"
+      with_items: "{{ react_build_cmds }}"
 
     - name: Remove node_modules before compression
       block:
@@ -39,7 +43,7 @@
 
         - name: remove node_modules manually
           file:
-            path: "{{ react_checkout_path }}/node_modules"
+            path: "{{ react_local_checkout_path }}/node_modules"
             state: absent
           delegate_to: localhost
           become: true
@@ -76,12 +80,16 @@
       become: true
       become_user: "{{ react_system_user }}"
 
-    - name: Compile Javascript
-      command: yarn build
-      args:
-        chdir: "{{ react_checkout_path }}"
-      become: true
+    - name: Build app locally
       become_user: "{{ react_system_user }}"
+      become: true
+      environment: "{{ item.env | default(react_build_cmds_default_env) }}"
+      command: "yarn {{ item.cmd | default(react_build_default_cmd) }} {{ item.args | default() }}"
+      register: yarn_build_result
+      args:
+        chdir: "{{ item.path | default(react_checkout_path) }}"
+      failed_when: "yarn_build_result.stderr is defined and yarn_build_result.stderr.find('error ') != -1"
+      with_items: "{{ react_build_cmds }}"
 
   when: "react_remote_js_build|bool"
 
