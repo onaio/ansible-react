@@ -3,3 +3,5 @@
 yarn.lock
 .vagrant/
 *.pyc
+venv/
+.cache/
