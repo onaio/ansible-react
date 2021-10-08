@@ -14,4 +14,4 @@
           GENERATE_SOURCEMAP: "false"
           SKIP_PREFLIGHT_CHECK: "true"
         react_remote_js_build: true
-        react_app_path: "{{ react_checkout_path }}"
+        react_app_path: "{{ react_checkout_path }}/app"
