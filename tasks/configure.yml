@@ -80,7 +80,7 @@
       become: true
       become_user: "{{ react_system_user }}"
 
-    - name: Build app locally
+    - name: Build app remotely
       become_user: "{{ react_system_user }}"
       become: true
       environment: "{{ item.env | default(react_build_cmds_default_env) }}"

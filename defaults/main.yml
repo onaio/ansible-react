@@ -52,6 +52,6 @@ react_build_default_cmd: build
 
 # app settings
 react_app_settings:
-  REACT_APP_WEBSITE_NAME: 'React Example App'
+  REACT_APP_WEBSITE_NAME: "React Example App"
   GENERATE_SOURCEMAP: "false"
   SKIP_PREFLIGHT_CHECK: "true"

@@ -15,7 +15,7 @@
           SKIP_PREFLIGHT_CHECK: "true"
         react_remote_js_build: false
         react_local_app_path: "{{ react_local_checkout_path }}/app"
-        react_app_path: "{{ react_checkout_path }}/app"
+        react_app_path: "{{ react_checkout_path }}"
         react_build_cmds:
           - cmd: lerna:prepublish
             args: --scope @opensrp/store
