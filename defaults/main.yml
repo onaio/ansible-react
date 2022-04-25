@@ -32,7 +32,7 @@ react_versioned_path: "{{ react_codebase_path }}-versioned"
 # where the repository is cloned
 react_checkout_path: "{{ react_versioned_path }}/{{ ansible_date_time['epoch'] }}"
 # where the actual app package is
-react_app_path: "{{ react_checkout_path }}"
+react_app_path: "{{ react_checkout_path }}/app"
 react_log_path: "/var/log/{{ react_app_name }}"
 react_max_versioned_folders: 10
 
