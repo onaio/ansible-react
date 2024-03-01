@@ -7,8 +7,7 @@
         dest: "{{ react_local_app_path }}/.env"
         mode: 0644
       delegate_to: localhost
-      become: true
-      become_user: "{{ react_local_user }}"
+      become: false
 
     - name: Install Javascript requirements locally
       yarn:
