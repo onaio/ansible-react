@@ -41,7 +41,6 @@
         force: true
       become: false
       delegate_to: localhost
-      become_user: "{{ react_local_user }}"
   when: " not react_remote_js_build|bool"
 
 - name: Remote Git clone
