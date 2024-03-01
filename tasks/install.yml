@@ -39,7 +39,7 @@
         version: "{{ react_git_version }}"
         depth: 1
         force: true
-      become: true
+      become: false
       delegate_to: localhost
       become_user: "{{ react_local_user }}"
   when: " not react_remote_js_build|bool"
