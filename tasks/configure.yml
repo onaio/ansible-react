@@ -7,20 +7,17 @@
         dest: "{{ react_local_app_path }}/.env"
         mode: 0644
       delegate_to: localhost
-      become: true
-      become_user: "{{ react_local_user }}"
+      become: false
 
     - name: Install Javascript requirements locally
       yarn:
         path: "{{ react_local_checkout_path }}"
         production: false
       delegate_to: localhost
-      become: true
-      become_user: "{{ react_local_user }}"
+      become: false
 
     - name: Build app locally
-      become_user: "{{ react_local_user }}"
-      become: true
+      become: false
       delegate_to: localhost
       environment: "{{ item.env | default(react_build_cmds_default_env) }}"
       command: "yarn {{ item.cmd | default(react_build_default_cmd) }} {{ item.args | default() }}"
@@ -38,31 +35,27 @@
             chdir: "{{ react_local_checkout_path }}"
           ignore_errors: true
           delegate_to: localhost
-          become: true
-          become_user: "{{ react_local_user }}"
+          become: false
 
         - name: remove node_modules manually
           file:
             path: "{{ react_local_checkout_path }}/node_modules"
             state: absent
           delegate_to: localhost
-          become: true
-          become_user: "{{ react_local_user }}"
+          become: false
 
     - name: Compress Build folder locally
       archive:
         path: "{{ react_local_checkout_path }}/"
         dest: "{{ react_local_checkout_path }}.tgz"
       delegate_to: localhost
-      become: true
-      become_user: "{{ react_local_user }}"
+      become: false
 
     - name: UnCompress Build folder to remote host
       unarchive:
         src: "{{ react_local_checkout_path }}.tgz"
         dest: "{{ react_checkout_path }}"
-      become: true
-      become_user: "{{ react_system_user }}"
+      become: false
   when: "not react_remote_js_build|bool"
 
 - name: configure build remotely
